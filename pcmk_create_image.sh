@@ -33,7 +33,7 @@ make_image()
 		cp $rpmdir/* rpms/
 	fi
 
-	echo "RUN yum install -y net-tools pacemaker resource-agents pcs corosync which fence-agents-common sysvinit-tools" >> Dockerfile
+	echo "RUN yum install -y net-tools pacemaker resource-agents pcs corosync which fence-agents-common sysvinit-tools docker" >> Dockerfile
 
 	echo "ADD /helper_scripts /usr/sbin" >> Dockerfile
 	echo "ADD $corosync_config /etc/corosync/" >> Dockerfile
