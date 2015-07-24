@@ -3,6 +3,7 @@ Docker containerization of the Pacemaker High Availability Cluster Manager
 
 
 ## Example Create Image
+```
 ./pcmk_create_image.sh
 
 Making Dockerfile
@@ -24,7 +25,7 @@ Step 4 : ENTRYPOINT /usr/sbin/pcmk_launch.sh
  ---> Using cache
  ---> 6b5c48968492
 Successfully built 6b5c48968492
-
+```
 ## Launch Image giving pacemaker access to docker socket.
 docker run -d -P -v /var/run/docker.sock:/var/run/docker.sock  --name=pcmk_test 6b5c48968492
 
