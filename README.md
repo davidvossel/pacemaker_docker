@@ -27,9 +27,12 @@ Step 4 : ENTRYPOINT /usr/sbin/pcmk_launch.sh
 Successfully built 6b5c48968492
 ```
 ## Launch Image giving pacemaker access to docker socket.
+```
 docker run -d -P -v /var/run/docker.sock:/var/run/docker.sock  --name=pcmk_test 6b5c48968492
+```
 
 ## Test that pacemaker is active
+```
 docker exec pcmk_test crm_mon -1
   Last updated: Fri Jul 24 21:50:20 2015
   Last change: Fri Jul 24 21:49:36 2015
@@ -40,14 +43,19 @@ docker exec pcmk_test crm_mon -1
   0 Resources configured
 
   Online: [ 8e1eae1a7d0b ]
+```
 
 ## Test that container has access to host's docker instance
+```
 docker exec pcmk_test docker ps
   CONTAINER ID        IMAGE                 COMMAND                CREATED             STATUS              PORTS               NAMES
   8e1eae1a7d0b        56992a77e0a9:latest   "/bin/sh -c /usr/sbi   7 seconds ago       Up 6 seconds                            pcmk_test        
+```
 
 ## Tell pcmk_test to launch a container on the host machine.
+```
 docker exec pcmk_test pcs property set stonith-enabled=false
 docker exec pcmk_test pcs resource create mycontainer ocf:heartbeat:docker image=<some image name> run_cmd=<custom entry point>
+```
 
 
