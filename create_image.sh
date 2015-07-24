@@ -53,3 +53,33 @@ make_image()
 	rm -rf rpms repos
 }
 
+function helptext() {
+	echo "pcmk_create_image.sh - A tool for creating a pacemaker docker image."
+	echo ""
+	echo "Usage: pcmk_create_image.sh [options]"
+	echo ""
+	echo "Options:"
+	echo "-f, --from               Specify the FROM image to base the docker containers off of. Default is \"$from\""
+	echo "-o, --repo-copy          Copy the repos in this host directory into the image's /etc/yum.repos.d/ directory"
+	echo "-R, --rpm-copy           Copy rpms in this directory to image for install".
+	echo "-c, --corosync-config    Copy a custom default corosync config into image.".
+	echo ""
+	exit $1
+}
+
+while true ; do
+	case "$1" in
+	--help|-h|-\?) helptext 0;;
+	-c|--corosync-config) corosync_config="$2"; shift; shift;;
+	-f|--from) from="$2"; shift; shift;;
+	-o|--repo-copy) repodir=$2; shift; shift;;
+	-R|--rpm-copy) rpmdir=$2; shift; shift;;
+	"") break;;
+	*) 
+		echo "unknown option $1"
+		helptext 1;;
+	esac
+done
+
+make_image
+
