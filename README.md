@@ -45,3 +45,10 @@ Online: [ 8e1eae1a7d0b ]
 $ docker exec pcmk_test docker ps
 CONTAINER ID        IMAGE                 COMMAND                CREATED             STATUS              PORTS               NAMES
 8e1eae1a7d0b        56992a77e0a9:latest   "/bin/sh -c /usr/sbi   7 seconds ago       Up 6 seconds                            pcmk_test        
+
+# Tell pcmk_test to launch a container on the host machine.
+
+$ docker exec pcmk_test pcs property set stonith-enabled=false
+$ docker exec pcmk_test pcs resource create mycontainer ocf:heartbeat:docker image=<some image name> run_cmd=<custom entry point>
+
+
