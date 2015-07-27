@@ -3,6 +3,7 @@
 from="centos:centos7"
 rpms=""
 corosync_config=""
+export_file=""
 
 make_image()
 {
@@ -49,6 +50,14 @@ make_image()
 	fi
 	image=$(docker $doc_opts images -q | head -n 1)
 
+	if [ -z "$export_file" ]; then
+		export_file="pcmk_container_${image}.tar"
+
+	fi
+	docker save $image > ${export_file}
+
+	echo "Docker container $image is exported to tar file ${export_file}"
+
 	# cleanup
 	rm -rf rpms repos
 }
@@ -63,6 +72,7 @@ function helptext() {
 	echo "-o, --repo-copy          Copy the repos in this host directory into the image's /etc/yum.repos.d/ directory"
 	echo "-R, --rpm-copy           Copy rpms in this directory to image for install".
 	echo "-c, --corosync-config    Copy a custom default corosync config into image.".
+	echo "-e, --export-file        Export pacemaker container image to this file path.".
 	echo ""
 	exit $1
 }
@@ -74,6 +84,7 @@ while true ; do
 	-f|--from) from="$2"; shift; shift;;
 	-o|--repo-copy) repodir=$2; shift; shift;;
 	-R|--rpm-copy) rpmdir=$2; shift; shift;;
+	-e|--export-file) export_file=$2; shift; shift;;
 	"") break;;
 	*) 
 		echo "unknown option $1"
