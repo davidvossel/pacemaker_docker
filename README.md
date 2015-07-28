@@ -149,3 +149,20 @@ Online: [ c7auto1 c7auto2 c7auto3 ]
 My three host machines are c7auto<1-3>. Pacemaker running in the container adpoted
 the hostname of the docker host machine because I set --net=host.
 
+## Virtual IP addresses and the Cloud.
+
+Traditionally pacemaker manages a VIP using the IPaddr2 resource-agent. This
+agent assigns a VIP to a local NIC, then performs ARP updates to inform the
+switching hardware that the VIP's layer2 MAC has changed. This method works
+fine in containerized docker instances as long as we have control over the
+network. By using the --net=host and --privileged=true docker run options,
+the pacemaker docker container has all the permissions it needs to manage
+VIPs using IPaddr2.
+
+In a cloud environment, we might not be able to dynamically assign any IP we
+want to a host. Instead we may need to use the cloud provider's API to assign
+a VIP to a specfic compute instance. If pacemaker needs to coordinate this
+VIP assignment, we'll need to create a resource-agent that utilizes the cloud
+providers API in order to automate moving the VIP between hosts during failover.
+
+
