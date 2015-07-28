@@ -1,5 +1,7 @@
 #!/bin/bash
 
+nodelist="$PCMK_NODE_LIST"
+
 status()
 {
 	prog="$1"
@@ -19,6 +21,10 @@ status()
 
 start()
 {
+	if [ -n "$nodelist" ]; then
+		pcs cluster setup --force --local --name k8master $nodelist
+	fi
+
 	/usr/share/corosync/corosync start > /dev/null 2>&1
 	mkdir -p /var/run
 
