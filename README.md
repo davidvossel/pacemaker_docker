@@ -44,6 +44,14 @@ in manyway represents the host.
 docker run -d -P -v /var/run/docker.sock:/var/run/docker.sock --net=host  --name=pcmk_test 6b5c48968492
 ```
 
+If you need pacemaker to be able to manage a VIP using the IPaddr2 resource,
+then the --privileged=true option must be used. This gives pacemaker the ability
+to modify the IP addresses associated with local network devices. 
+
+```
+docker run -d -P -v /var/run/docker.sock:/var/run/docker.sock --net=host --privileged=true --name=pcmk_test 26e53d8b4652
+```
+
 ## Test that pacemaker is active
 ```
 docker exec pcmk_test crm_mon -1
