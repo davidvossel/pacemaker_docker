@@ -2,6 +2,8 @@
 
 nodelist="$PCMK_NODE_LIST"
 
+trap "stop; exit 0;" SIGTERM SIGINT 
+
 status()
 {
 	prog="$1"
