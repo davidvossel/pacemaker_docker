@@ -27,8 +27,21 @@ Step 4 : ENTRYPOINT /usr/sbin/pcmk_launch.sh
 Successfully built 6b5c48968492
 ```
 ## Launch Image giving pacemaker access to docker socket.
+
+Note the usage of -v to mount the host docker.sock file into the container
+as well as the --net=host option which gives the container access to the
+host's network devices.
+
+We need the docker.sock file accessible so pacemaker can launch containers
+on the host while pacemaker is living within a container.
+
+We need the --net=host option set so pacemaker can bind to the host's static
+local ip address. Even though pacemaker is running in a container, it is
+associated with the host. Pacemaker is launching containers on the host and
+in manyway represents the host.
+
 ```
-docker run -d -P -v /var/run/docker.sock:/var/run/docker.sock  --name=pcmk_test 6b5c48968492
+docker run -d -P -v /var/run/docker.sock:/var/run/docker.sock --net=host  --name=pcmk_test 6b5c48968492
 ```
 
 ## Test that pacemaker is active
